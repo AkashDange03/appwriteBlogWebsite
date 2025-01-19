@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RTE } from '../index';
 import { toast } from 'react-hot-toast';
+
 function PostForm({ post }) {
     const { register, handleSubmit, watch, setValue, control, getValues } = useForm(
         {
@@ -14,55 +15,107 @@ function PostForm({ post }) {
                 slug: post?.slug || '',
                 content: post?.content || '',
                 status: post?.status || 'active',
+                categories: post?.categories || [],
+                tags: post?.tags || [],
+                video_url: post?.video_url || '',
+                translations: post?.translations || '[]', // Store as JSON string
+                engagement_metrics: post?.engagement_metrics || '{}', // Store as JSON string
             }
         })
 
     const navigate = useNavigate();
     const userData = useSelector((state) => state.auth.userData);
 
+    const uploadFile = async (file) => {
+        console.log("file mai aya")
+        if (file) {
+            return await appwriteservice.uploadFile(file);
+        }
+        return null;
+    };
 
     const submit = async (data) => {
-        console.log(data)
-        if (post) {
-            const file = await data.image[0] ? appwriteservice.uploadFile(data.image[0]) : null;
+       
 
+        try {
+            // Handle file upload for featured image
+            const file = await uploadFile(data.image[0]);
+            console.log("file mai aya")
             if (file) {
-                appwriteservice.deleteFile(post.featuredImage);
+                data.featuredImage = file.$id;
             }
 
-            const dbPost = await appwriteservice.updatePost(post.$id, {
+            const translationdummy=[
+                {
+                  "lang": "ta",
+                  "title": "CSS ஆரம்பநிலை",
+                  "content": "CSS வலைப் பக்கங்களை வடிவமைக்க மற்றும் அமைக்க பயன்படுத்தப்படுகிறது."
+                },
+                {
+                  "lang": "hi",
+                  "title": "CSS का परिचय",
+                  "content": "CSS का उपयोग वेब पेजों को स्टाइल और लेआउट करने के लिए किया जाता है।"
+                },
+                {
+                  "lang": "mr",
+                  "title": "CSS चे परिचय",
+                  "content": "CSS वेब पृष्ठांचे स्वरूप आणि लेआउट तयार करण्यासाठी वापरले जाते।"
+                },
+                {
+                  "lang": "en",
+                  "title": "Introduction to CSS",
+                  "content": "CSS is used to style and layout web pages."
+                }
+              ]
+              
+
+            // Handle translations and engagement_metrics as JSON strings
+            const translations = JSON.stringify(translationdummy);
+            const categories =  data.categories.split(",");
+            const tags = data.tags.split(",");
+            console.log(translations)
+    
+            const finalData = {
                 ...data,
-                featuredImage: file ? file.$id : undefined,
+                translations,
+                categories,
+                tags,
+                userId: userData.$id, // Ensure userId is added
+            };
 
-            })
-
-            toast.success("post updated successfully...");
-
-            if (dbPost) {
-                navigate(`/post/${dbPost.$id}`)
-            }
-
-            } 
-            else {
-                console.log("uploding fileds")
-                const file = await appwriteservice.uploadFile(data.image[0]);
-
+            if (post) {
+                // Updating post logic
                 if (file) {
-                    const fileId = file.$id;
-                    data.featuredImage = fileId;
-                    const dbPost = await appwriteservice.createPost({
-                        ...data,
-                        userId: userData.$id
-                    })
-                    toast.success("post created successfully...");
-                    if (dbPost) {
-                        navigate(`/post/${dbPost.$id}`)
-                    }
+                    appwriteservice.deleteFile(post.featuredImage);
+                }
 
+                const dbPost = await appwriteservice.updatePost(post.$id, {
+                    ...finalData,
+                    featuredImage: data.featuredImage || post.featuredImage,
+                });
+
+                toast.success("Post updated successfully...");
+
+                if (dbPost) {
+                    navigate(`/post/${dbPost.$id}`);
+                }
+            } else {
+                // Creating new post logic
+                
+
+                const dbPost = await appwriteservice.createPost(finalData);
+
+                toast.success("Post created successfully...");
+
+                if (dbPost) {
+                    navigate(`/post/${dbPost.$id}`);
                 }
             }
-
-    }
+        } catch (error) {
+            toast.error("Something went wrong, please try again.");
+            console.error(error);
+        }
+    };
 
     const slugTransform = useCallback((value) => {
         if (value && typeof value === "string") {
@@ -70,29 +123,26 @@ function PostForm({ post }) {
                 .trim()
                 .toLowerCase()
                 .replace(/[^a-zA-Z\d\s]+/g, "-")
-                .replace(/\s/g, "-")
+                .replace(/\s/g, "-");
         }
-        return ""
-    }, [])
-
+        return "";
+    }, []);
 
     React.useEffect(() => {
-
         const subscription = watch((value, { name }) => {
             if (name === 'title') {
-
-                setValue('slug', slugTransform(value.title, { shouldValidate: true }))
+                setValue('slug', slugTransform(value.title), { shouldValidate: true });
             }
-        })
+        });
 
         return () => {
             subscription.unsubscribe();
-        }
-    }, [watch, slugTransform, setValue])
+        };
+    }, [watch, slugTransform, setValue]);
 
     return (
-        <form onSubmit={handleSubmit(submit)} className=" flex flex-col justify-center  items-center md:flex md:flex-row md:items-start md:flex-wrap w-[100%]">
-            <div className=" w-full md:w-2/3 px-2">
+        <form onSubmit={handleSubmit(submit)} className="flex flex-col justify-center items-center md:flex md:flex-row md:items-start md:flex-wrap w-[100%]  my-10 md:my-20">
+            <div className="w-full md:w-2/3 px-2 h-full ">
                 <Input
                     label="Title :"
                     placeholder="Title"
@@ -109,6 +159,24 @@ function PostForm({ post }) {
                     }}
                 />
                 <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} />
+                <Input
+                    label="Video URL :"
+                    placeholder="Video URL"
+                    className="mb-4"
+                    {...register("video_url")}
+                />
+                <Input
+                    label="Categories (comma separated) :"
+                    placeholder="Categories"
+                    className="mb-4"
+                    {...register("categories")}
+                />
+                <Input
+                    label="Tags (comma separated) :"
+                    placeholder="Tags"
+                    className="mb-4"
+                    {...register("tags")}
+                />
             </div>
             <div className="w-full md:w-1/3 px-2 mt-2">
                 <Input
@@ -141,4 +209,4 @@ function PostForm({ post }) {
     );
 }
 
-export default PostForm
+export default PostForm;

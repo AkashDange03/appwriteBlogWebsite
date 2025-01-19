@@ -14,7 +14,18 @@ export class Service {
         this.bucket = new Storage(this.client);
     }
 
-    async createPost({ title, slug, content, featuredImage, status, userId }) {
+    async createPost({ 
+        title, 
+        slug, 
+        content, 
+        featuredImage, 
+        status, 
+        userId, 
+        videoUrl, 
+        categories, 
+        tags, 
+        translations 
+    }) {
         try {
             return await this.databases.createDocument(
                 conf.appwriteDatabaseId,
@@ -25,12 +36,20 @@ export class Service {
                     content,
                     featuredImage,
                     status,
-                    userId
-                })
+                    userId,
+                    videoUrl,
+                    categories,
+                    tags,
+                    translations,
+                    likes: [],
+                    views: []
+                }
+            );
         } catch (error) {
             throw error;
         }
     }
+    
 
     async updatePost(slug,{title, content, featuredImage, status}){
         try{
@@ -42,6 +61,20 @@ export class Service {
                 status
             });
         }catch(error){
+            throw error;
+        }
+    }
+
+    async updatePostEngagement(slug, updatedFields) {
+        try {
+            return await this.databases.updateDocument(
+                conf.appwriteDatabaseId,  // Replace with your database ID
+                conf.appwriteCollectionId, // Replace with your collection ID
+                slug, // The document ID or slug
+                updatedFields // The specific fields to update
+            );
+        } catch (error) {
+            console.error("Error updating post engagement metrics:", error);
             throw error;
         }
     }
@@ -73,6 +106,8 @@ export class Service {
             return false;
         }
     }
+
+    
 
     //file upload
 
