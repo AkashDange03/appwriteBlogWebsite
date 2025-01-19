@@ -34,8 +34,8 @@ const UploadMedia = () => {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setUploadedUrl(response.data.secure_url);
-      const para = await axios.post("https://python-backend-miuc.onrender.com/process_video",uploadedUrl);
-      console.log(para);
+      // const para = await axios.post("https://python-backend-miuc.onrender.com/process_video",uploadedUrl);
+      // console.log(para);
       setError('');
     } catch (err) {
       console.error('Upload error:', err);
