@@ -3,8 +3,8 @@ import { Link} from "react-router-dom"
 import Logo from '../Logo'
 function Footer() {
   return (
-    <section className="relative overflow-hidden py-10 bg-slate-900 text-white border  border-t-black">
-    <div className="relative z-10 mx-auto max-w-7xl px-4">
+    <section className=" py-10 bg-primary text-white border  border-border border-t-2 mt-60 ">
+    <div className="mx-auto  px-4">
         <div className="-m-6 flex flex-wrap">
             <div className="w-full p-6 md:w-1/2 lg:w-5/12">
                 <div className="flex h-full flex-col justify-between">
@@ -12,7 +12,7 @@ function Footer() {
                         <Logo width="100px" />
                     </div>
                     <div>
-                        <p className="text-sm text-orange-500">
+                        <p className="text-sm text-button">
                             &copy; Copyright 2023. All Rights Reserved by DevUI.
                         </p>
                     </div>
@@ -20,13 +20,13 @@ function Footer() {
             </div>
             <div className="w-full p-6 md:w-1/2 lg:w-2/12">
                 <div className="h-full">
-                    <h3 className="tracking-px mb-9  text-xs font-semibold uppercase text-white">
+                    <h3 className="tracking-px mb-9  text-md font-semibold uppercase text-button">
                         Company
                     </h3>
                     <ul>
                         <li className="mb-4">
                             <Link
-                                className=" text-base font-medium text-white  hover:text-orange-500"
+                                className=" text-base font-medium text-white hover:text-button"
                                 to="/"
                             >
                                 Features
@@ -34,7 +34,7 @@ function Footer() {
                         </li>
                         <li className="mb-4">
                             <Link
-                                className=" text-base font-medium text-white hover:text-orange-500"
+                                className=" text-base font-medium text-white hover:text-button"
                                 to="/"
                             >
                                 Pricing
@@ -42,7 +42,7 @@ function Footer() {
                         </li>
                         <li className="mb-4">
                             <Link
-                                className=" text-base font-medium text-white hover:text-orange-500"
+                                className=" text-base font-medium text-white hover:text-button"
                                 to="/"
                             >
                                 Affiliate Program
@@ -50,7 +50,7 @@ function Footer() {
                         </li>
                         <li>
                             <Link
-                                className=" text-base font-medium text-white hover:text-orange-500"
+                                className=" text-base font-medium text-white hover:text-button"
                                 to="/"
                             >
                                 Press Kit
@@ -67,7 +67,7 @@ function Footer() {
                     <ul>
                         <li className="mb-4">
                             <Link
-                                className=" text-base font-medium text-white hover:text-orange-500"
+                                className=" text-base font-medium text-white hover:text-button"
                                 to="/"
                             >
                                 Account
@@ -75,7 +75,7 @@ function Footer() {
                         </li>
                         <li className="mb-4">
                             <Link
-                                className=" text-base font-medium text-white hover:text-orange-500"
+                                className=" text-base font-medium text-white hover:text-button"
                                 to="/"
                             >
                                 Help
@@ -83,7 +83,7 @@ function Footer() {
                         </li>
                         <li className="mb-4">
                             <Link
-                                className=" text-base font-medium text-white hover:text-orange-500"
+                                className=" text-base font-medium text-white hover:text-button"
                                 to="/"
                             >
                                 Contact Us
@@ -91,7 +91,7 @@ function Footer() {
                         </li>
                         <li>
                             <Link
-                                className=" text-base font-medium text-white hover:text-orange-500"
+                                className=" text-base font-medium text-white hover:text-button"
                                 to="/"
                             >
                                 Customer Support
@@ -108,7 +108,7 @@ function Footer() {
                     <ul>
                         <li className="mb-4">
                             <Link
-                                className=" text-base font-medium text-white hover:text-orange-500"
+                                className=" text-base font-medium text-white hover:text-button"
                                 to="/"
                             >
                                 Terms &amp; Conditions
@@ -116,7 +116,7 @@ function Footer() {
                         </li>
                         <li className="mb-4">
                             <Link
-                                className=" text-base font-medium text-white hover:text-orange-500"
+                                className=" text-base font-medium text-white hover:text-button"
                                 to="/"
                             >
                                 Privacy Policy
@@ -124,7 +124,7 @@ function Footer() {
                         </li>
                         <li>
                             <Link
-                                className=" text-base font-medium text-white hover:text-orange-500"
+                                className=" text-base font-medium text-white hover:text-button"
                                 to="/"
                             >
                                 Licensing

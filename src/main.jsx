@@ -12,6 +12,8 @@ import Post from './Pages/Post.jsx';
 import Signup from './Pages/Signup';
 import EditPost from './Pages/EditPost.jsx';
 import AllPost from './Pages/AllPost.jsx';
+import UploadMedia from './Pages/UploadMedia.jsx';
+
 
 
 const router = createBrowserRouter([
@@ -21,7 +23,7 @@ const router = createBrowserRouter([
       children: [
           {
               path: "/",
-              element: <Home />,
+              element: (<Home />),
           },
           {
               path: "/login",
@@ -53,10 +55,19 @@ const router = createBrowserRouter([
               element: (
                   <AuthLayout authentication>
                       {" "}
-                      <AddPost />
+                      <UploadMedia/>
                   </AuthLayout>
               ),
           },
+          {
+            path: "/create-post",
+            element: (
+                <AuthLayout authentication>
+                    {" "}
+                    <AddPost/>
+                </AuthLayout>
+            ),
+        },
           {
               path: "/edit-post/:slug",
               element: (
