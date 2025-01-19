@@ -21,11 +21,6 @@ Video Input
 User uploads a video, which is store…
 [7:48 am, 19/1/2025] Jatin: The Blog Dashboard is a cutting-edge platform developed to simplify the process of creating, transcribing, translating, and publishing blogs in 10 regional Indian languages: Hindi, Marathi, Gujarati, Tamil, Kannada, Telugu, Bengali, Malayalam, Punjabi, and Odia. Built for the Level Supermind Hackathon, this tool is tailored to enhance inclusivity and provide a seamless multilingual blogging experience. The system allows users to input content through multiple formats, including direct text entry, audio uploads, and video uploads, ensuring flexibility for diverse content creation needs. The platform's user-friendly interface and powerful backend make it a robust solution for efficient blog management.
 
-For video inputs, the platform leverages Cloudinary to st…
-[7:52 am, 19/1/2025] Jatin: {
-    "error": "Google Speech Recognition could not understand the audio"
-}
-[8:24 am, 19/1/2025] Jatin: # Blog Dashboard with Text and Video Input 🌐
 
 ## About the Project 📝
 This *Blog Dashboard* allows users to input text and video content for seamless transcription, translation, and blog publishing in *10 regional Indian languages*:
