@@ -13,6 +13,7 @@ import Signup from './Pages/Signup';
 import EditPost from './Pages/EditPost.jsx';
 import AllPost from './Pages/AllPost.jsx';
 import UploadMedia from './Pages/UploadMedia.jsx';
+import PostLang from './Pages/PostLang.jsx';
 
 
 
@@ -81,6 +82,10 @@ const router = createBrowserRouter([
               path: "/post/:slug",
               element: <Post />,
           },
+          {
+            path: "/postlang/:slug/:language",
+            element: <PostLang />,
+        },
       ],
   },
   ])

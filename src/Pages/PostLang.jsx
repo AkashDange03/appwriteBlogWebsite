@@ -4,36 +4,55 @@ import appwriteService from "../appwrite/config";
 import { Button, Container } from "../components";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet";
 
-export default function Post() {
+export default function PostLang() {
     const [post, setPost] = useState(null);
     const [likesCount, setLikesCount] = useState(0);
     const [viewsCount, setViewsCount] = useState(0);
-
-    const { slug } = useParams();
+    const { slug, language } = useParams(); // Get slug and language from URL params
     const navigate = useNavigate();
-
     const userData = useSelector((state) => state.auth.userData);
 
-
     useEffect(() => {
-        if (slug) {
-        
+        if (slug && language) {
+            console.log("slug",slug , language)
+            // Fetch the post by slug
             appwriteService.getPost(slug).then((post) => {
                 if (post) {
-                    console.log(post)
-                    setPost(post);
-                    setLikesCount(post.likes?.length || 0);
-                    setViewsCount(post.views?.length || 0);
+                    let translations = [];
 
-                    // Increment views only if the user hasn't viewed it before
-                    if (!post.views?.includes(userData.$id)) {
-                        incrementViews(post);
+                    // Parse translations if it's a string
+                    try {
+                        translations = JSON.parse(post.translations || '[]');
+                        console.log(translations)
+                    } catch (error) {
+                        console.error("Error parsing translations JSON", error);
                     }
-                } else navigate("/");
+
+                    // Find the translation for the selected language, fallback to English
+                    const selectedTranslation = translations.find(
+                        (translation) => translation.lang === language
+                    ) || translations.find((translation) => translation.lang === 'en');
+
+                    if (selectedTranslation) {
+                        setPost({
+                            ...post,
+                            title: selectedTranslation.title,
+                            content: selectedTranslation.content,
+                        });
+                        setLikesCount(post.likes?.length || 0);
+                        setViewsCount(post.views?.length || 0);
+
+                        // Increment views only if the user hasn't viewed it before
+                        if (!post.views?.includes(userData.$id)) {
+                            incrementViews(post);
+                        }
+                    }
+                } else navigate("/"); // Navigate to home if post not found
             });
-        } else navigate("/");
-    }, [slug, navigate, userData]);
+        } else navigate("/"); // Navigate to home if slug or language is missing
+    }, [slug, language, navigate, userData]);
 
     const incrementViews = async (postData) => {
         if (!postData) {
@@ -54,7 +73,7 @@ export default function Post() {
 
     const handleLike = async () => {
         if (post.likes?.includes(userData.$id)) {
-            console.log("user is already exists")
+            console.log("User already liked this post");
             // User has already liked the post
             return;
         }
@@ -80,6 +99,13 @@ export default function Post() {
 
     return post ? (
         <div className="my-10 py-20">
+            <Helmet>
+                <title>{post.title}</title>
+                <meta name="description" content={post.description || "Default description"} />
+                <meta property="og:title" content={post.title} />
+                <meta property="og:description" content={post.description || "Default description"} />
+                <meta property="og:image" content={appwriteService.getFilePreview(post.featuredImage)} />
+            </Helmet>
             <Container>
                 <div className="w-full flex justify-center mb-4 relative border border-black rounded-xl p-2">
                     <img

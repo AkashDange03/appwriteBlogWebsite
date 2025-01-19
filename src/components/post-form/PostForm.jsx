@@ -35,60 +35,51 @@ function PostForm({ post }) {
     };
 
     const submit = async (data) => {
-        console.log("huuaa");
-        data={
-            "title": "Introduction to React",
-            "slug":"hello",
-            "userId": "akashdange",
-            "featuredImage": "https://example.com/image.jpg",
-            "status": "active",
-            "content": "React is a JavaScript library for building user interfaces. It's used for creating dynamic and interactive web applications.",
-            "sourcelang": "en",
-            "videoUrl": "https://example.com/video.mp4",
-            "categories": ["JavaScript", "Web Development"],
-            "tags": ["React", "JavaScript", "Frontend"],
-            "translations": [
-              {
-                "lang": "mr",
-                "title": "React चे परिचय",
-                "content": "React हा वापरकर्ता इंटरफेस तयार करण्यासाठी एक जावास्क्रिप्ट लायब्ररी आहे. ते डायनॅमिक आणि संवादात्मक वेब अनुप्रयोग तयार करण्यासाठी वापरले जाते."
-              }, {
-                "lang": "mr",
-                "title": "React चे परिचय",
-                "content": "React हा वापरकर्ता इंटरफेस तयार करण्यासाठी एक जावास्क्रिप्ट लायब्ररी आहे. ते डायनॅमिक आणि संवादात्मक वेब अनुप्रयोग तयार करण्यासाठी वापरले जाते."
-              },
-              {
-                "lang": "hi",
-                "title": "React का परिचय",
-                "content": "React एक जावास्क्रिप्ट पुस्तकालय है जो उपयोगकर्ता इंटरफेस बनाने के लिए है। इसका उपयोग गतिशील और इंटरएक्टिव वेब एप्लिकेशन बनाने के लिए किया जाता है।"
-              },
-              {
-                "lang": "ta",
-                "title": "React அறிமுகம்",
-                "content": "React என்பது பயனர் இடைமுகங்களை உருவாக்குவதற்கான ஒரு ஜாவாஸ்கிரிப்ட் நூலகம். இது இயக்கத்துடன் கூடிய மற்றும் இடைமுக செயல்பாடுகளை உள்ளடக்கிய வலை பயன்பாடுகளை உருவாக்க பயன்படுத்தப்படுகிறது."
-              }
-            ],
-            "likes": ["user_123", "user_456", "user_789"],
-            "views": ["user_123", "user_456"]
-          }
-
-          console.log(data)
+       
 
         try {
             // Handle file upload for featured image
-            // const file = await uploadFile(data.image[0]);
-            // console.log("file mai aya")
-            // if (file) {
-            //     data.featuredImage = file.$id;
-            // }
+            const file = await uploadFile(data.image[0]);
+            console.log("file mai aya")
+            if (file) {
+                data.featuredImage = file.$id;
+            }
+
+            const translationdummy=[
+                {
+                  "lang": "ta",
+                  "title": "CSS ஆரம்பநிலை",
+                  "content": "CSS வலைப் பக்கங்களை வடிவமைக்க மற்றும் அமைக்க பயன்படுத்தப்படுகிறது."
+                },
+                {
+                  "lang": "hi",
+                  "title": "CSS का परिचय",
+                  "content": "CSS का उपयोग वेब पेजों को स्टाइल और लेआउट करने के लिए किया जाता है।"
+                },
+                {
+                  "lang": "mr",
+                  "title": "CSS चे परिचय",
+                  "content": "CSS वेब पृष्ठांचे स्वरूप आणि लेआउट तयार करण्यासाठी वापरले जाते।"
+                },
+                {
+                  "lang": "en",
+                  "title": "Introduction to CSS",
+                  "content": "CSS is used to style and layout web pages."
+                }
+              ]
+              
 
             // Handle translations and engagement_metrics as JSON strings
-            const translations = JSON.stringify(data.translations);
+            const translations = JSON.stringify(translationdummy);
+            const categories =  data.categories.split(",");
+            const tags = data.tags.split(",");
             console.log(translations)
     
             const finalData = {
                 ...data,
                 translations,
+                categories,
+                tags,
                 userId: userData.$id, // Ensure userId is added
             };
 
